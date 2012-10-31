@@ -6,7 +6,9 @@ Mocking library for the Boo language (compatible with Unity Engine).  Modelled a
 Usage
 =====
 
-mock = BooMock("mock name for reference")
+namespace BooMock
+
+mock = Mock("mock name for reference")
 mock.Stubs("FunctionName").With("argument", "list").Returns("return value")
 
 mock.FunctionName("argument", "list") == "return value"

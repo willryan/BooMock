@@ -1,20 +1,24 @@
+namespace BooMock
+
 import System.Collections.Generic
 
 # represents an invocation of a particular method on a mock 
 # (parameters plus a sequential queue of values to return)
-class BooMethodInvocationStub: 
+class MethodInvocationStub: 
 	private _returnList as Queue[of object]
 	private _params as (object)
 
 	def constructor(params as (object)):
 		_params = params
-		_returnList = Queue[of object]()
+		_returnList = null
 		
 	# TODO use a getter to remove the need for ()
 	def Then():
 		return self
 		
 	def Returns(returnValue):
+		if (_returnList == null):
+			_returnList = Queue[of object]()
 		_returnList.Enqueue(returnValue)
 		return self
 		
@@ -27,6 +31,10 @@ class BooMethodInvocationStub:
 			return true
 		else:
 			return false
-		
+	
 	def onInvocation():
-		return _returnList.Dequeue()
+		if (_returnList != null):
+			if (_returnList.Count > 1):
+				return _returnList.Dequeue()
+			else:
+				return _returnList.Peek()

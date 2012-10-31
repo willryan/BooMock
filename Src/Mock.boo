@@ -1,7 +1,9 @@
+namespace BooMock
+
 # BooMock - uses IQuackFu duck typing to mock method calls
 # Use it as follows:
 #
-# mock = BooMock("mock name for reference")
+# mock = Mock("mock name for reference")
 # mock.Stubs("FunctionName").With("argument", "list").Returns("return value")
 #
 # mock.FunctionName("argument", "list") == "return value"
@@ -23,7 +25,7 @@
 # mock.FunctionName(1) == 3
 # mock.FunctionName(1) == 5
 #
-class BooMock (IQuackFu): 
+class Mock (IQuackFu): 
 	private _mockName as string
 	private _methodStubs as Hash
 
@@ -33,18 +35,22 @@ class BooMock (IQuackFu):
 
 	def Name():
 		return _mockName
+
+	def ToString():
+		return "Mock<$(_mockName)>"
 		
-	def Stubs(method as string) as BooMethodStub:
+	def Stubs(method as string) as MethodStub:
 		methodStub = _methodStubs[method]
 		if (methodStub == null):
-			methodStub = BooMethodStub(method)
+			methodStub = MethodStub(method)
 			_methodStubs[method] = methodStub
 		return methodStub
 		
 	# INTERNAL USE
 	
+	#TODO - more help when things don't match
 	def QuackInvoke(name as string, params as (object)) as object:
-		methodStub = _methodStubs[name] as BooMethodStub
+		methodStub = _methodStubs[name] as MethodStub
 		invocation = methodStub.findInvocation(params)
 		if (invocation != null):
 			return invocation.onInvocation()
